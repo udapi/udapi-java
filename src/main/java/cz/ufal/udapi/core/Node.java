@@ -374,4 +374,10 @@ public interface Node {
      * @return bundle the node belongs to
      */
     Bundle getBundle();
+
+    /**
+     *
+     * @return document the node belongs to
+     */
+    Document getDocument();
 }

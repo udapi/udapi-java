@@ -1,6 +1,7 @@
 package cz.ufal.udapi.core.impl;
 
 import cz.ufal.udapi.core.Bundle;
+import cz.ufal.udapi.core.Document;
 import cz.ufal.udapi.core.Root;
 import cz.ufal.udapi.core.Node;
 import cz.ufal.udapi.exception.UdapiException;
@@ -108,6 +109,11 @@ public class DefaultNode implements Node {
     @Override
     public Bundle getBundle() {
         return tree.getBundle();
+    }
+
+    @Override
+    public Document getDocument() {
+        return getBundle().getDocument();
     }
 
     public List<Node> getDescendantsF() {
