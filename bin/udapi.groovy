@@ -5,10 +5,22 @@ import static groovy.io.FileType.FILES
 def scriptFile = new File(getClass().protectionDomain.codeSource.location.path)
 def scriptDir = scriptFile.parent
 
+String currentDir = new File(".").getAbsolutePath()
+
 def libDir = new File(scriptDir + File.separator + "..");
+
+def userLibDir = new File(currentDir + File.separator + "lib");
 
 if (libDir.exists()) {
     libDir.eachFileRecurse(FILES) {
+        if (it.name.endsWith('.jar')) {
+            this.getClass().classLoader.rootLoader.addURL(it.toURI().toURL())
+        }
+    }
+}
+
+if (userLibDir.exists()) {
+    userLibDir.eachFileRecurse(FILES) {
         if (it.name.endsWith('.jar')) {
             this.getClass().classLoader.rootLoader.addURL(it.toURI().toURL())
         }

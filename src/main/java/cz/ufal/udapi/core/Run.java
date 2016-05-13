@@ -153,8 +153,8 @@ public class Run {
                 }
 
             } else {
-                //builtin block without prefix
-                className = BLOCK_PACKAGE_PREFIX + blockName;
+                //block without prefix/package
+                className = blockName;
             }
 
             try {
