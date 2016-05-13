@@ -1,2 +1,36 @@
-# udapi-java
-Java framework for processing Universal Dependencies data
+# NAME
+
+Udapi - a framework for processing Universal Dependencies
+
+# SYNOPSIS
+
+    # from command line
+    cat in.conllu | udapi.groovy Read::CoNLLU My::NLP::Block Another::Block \
+                             Write::CoNLLU > out.conllu
+
+# DESCRIPTION
+
+Udapi is API for processing UD (Universal Dependencies) data.
+See [http://udapi.github.io](http://udapi.github.io) and [http://universaldependencies.org](http://universaldependencies.org).
+This distribution is a Perl implementation of the Udapi framework.
+
+# AUTHOR
+
+Martin Vojtek <martin.vojtek@hotmail.com>
+
+# COPYRIGHT AND LICENSE
+
+Copyright © 2016 by Institute of Formal and Applied Linguistics, Charles University in Prague
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+For the complete terms of the GNU General Public License, please see this URL:
+http://www.gnu.org/licenses/gpl-2.0.html
