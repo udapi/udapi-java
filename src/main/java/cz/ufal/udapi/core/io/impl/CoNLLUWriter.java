@@ -121,7 +121,7 @@ public class CoNLLUWriter implements DocumentWriter {
      *
      * @param bufferedWriter writer to write with
      * @param tree tree to serialize
-     * @throws IOException
+     * @throws UdapiIOException If any IOException happens
      */
     public void processTree(BufferedWriter bufferedWriter, Root tree) throws UdapiIOException {
         List<Node> descendants = tree.getDescendants();

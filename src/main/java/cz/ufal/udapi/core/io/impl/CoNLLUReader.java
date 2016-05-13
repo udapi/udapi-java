@@ -77,7 +77,7 @@ public class CoNLLUReader implements DocumentReader {
      * Reads CoNLLU file into given document.
      *
      * @param document document to read into
-     * @throws UdapiIOException
+     * @throws UdapiIOException If any IOException happens
      */
     @Override
     public void readInDocument(final Document document) throws UdapiIOException {
@@ -124,10 +124,10 @@ public class CoNLLUReader implements DocumentReader {
      *
      * Close of the reader is responsibility of caller.
      *
-     * @param bufferedReader
-     * @param document
-     * @return
-     * @throws UdapiIOException
+     * @param bufferedReader reader to use
+     * @param document document to read into
+     * @return parsed tree
+     * @throws UdapiIOException If any IOException happens
      */
     @Override
     public Optional<Root> readTree(BufferedReader bufferedReader, final Document document) throws UdapiIOException {
@@ -166,7 +166,7 @@ public class CoNLLUReader implements DocumentReader {
      *
      * @param document document to load into
      * @return tree of the sentence
-     * @throws UdapiIOException
+     * @throws UdapiIOException If any IOException happens
      */
     @Override
     public Optional<Root> readTree(final Document document) throws UdapiIOException {

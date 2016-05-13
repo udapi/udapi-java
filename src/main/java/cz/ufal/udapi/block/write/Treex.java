@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Serializes internal structure into format used by TrEd tool.
- * <a href="https://ufal.mff.cuni.cz/tred/">
+ * <a href="https://ufal.mff.cuni.cz/tred/">TrED</a>
  *
  * @author Martin Vojtek
  */

@@ -17,7 +17,7 @@ import cz.ufal.udapi.core.Node;
  *     a-node $A:= [
  *       child a-node [
  *         conll/cpos = 'ADP',
- *         ord > $A.ord,
+ *         ord &gt; $A.ord,
  *       ]
  *     ]
  * </code>
