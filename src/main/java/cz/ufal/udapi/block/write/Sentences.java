@@ -40,7 +40,7 @@ public class Sentences extends Block {
     }
 
     @Override
-    public void processTree(Root tree, int bundleNo) {
+    public void processTree(Root tree) {
 
         String sentence = tree.getSentence();
         if (null == sentence) {
@@ -53,11 +53,11 @@ public class Sentences extends Block {
                     sentence = "";
                 } else {
                     if (FATAL.equals(ifMissing)) {
-                        throw new UdapiException("Sentence " + bundleNo + " is undefined");
+                        throw new UdapiException("Sentence " + tree.getAddress() + " is undefined");
                     }
                 }
             } else {
-                System.err.println("Sentence " + bundleNo + " is undefined");
+                System.err.println("Sentence " + tree.getAddress() + " is undefined");
             }
         }
 

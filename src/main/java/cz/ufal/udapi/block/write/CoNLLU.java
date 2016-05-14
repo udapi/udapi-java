@@ -33,7 +33,7 @@ public class CoNLLU extends Block {
     }
 
     @Override
-    public void processTree(Root tree, int bundleNo) {
+    public void processTree(Root tree) {
         coNLLUWriter.processTree(bufferedWriter, tree);
     }
 

@@ -58,18 +58,16 @@ public class Eval extends Block {
         }
 
         if (getParams().containsKey(BUNDLE) || getParams().containsKey(TREE) || getParams().containsKey(NODE)) {
-            int bundleNo = 1;
             for (Bundle bundle : document.getBundles()) {
-                if (shouldProcessBundle(bundle, bundleNo)) {
-                    processBundle(bundle, bundleNo);
+                if (shouldProcessBundle(bundle)) {
+                    processBundle(bundle);
                 }
-                bundleNo++;
             }
         }
     }
 
     @Override
-    public void processBundle(Bundle bundle, int bundleNo) {
+    public void processBundle(Bundle bundle) {
         if (getParams().containsKey(BUNDLE)) {
             Map<String, Object> params = new HashMap<>();
             params.put(VAR_SELF, bundle);
@@ -82,7 +80,7 @@ public class Eval extends Block {
         if (getParams().containsKey(TREE) || getParams().containsKey(NODE)) {
             for (Root tree : bundle.getTrees()) {
                 if (shouldProcessTree(tree)) {
-                    processTree(tree, bundleNo);
+                    processTree(tree);
                 }
             }
         }
@@ -90,7 +88,7 @@ public class Eval extends Block {
     }
 
     @Override
-    public void processTree(Root tree, int bundleNo) {
+    public void processTree(Root tree) {
         if (getParams().containsKey(TREE)) {
             Map<String, Object> params = new HashMap<>();
             params.put(VAR_SELF, tree);

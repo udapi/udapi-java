@@ -50,7 +50,11 @@ public class DefaultDocument implements Document {
      */
     @Override
     public Bundle createBundle() {
-        Bundle bundle = new DefaultBundle(this);
+        DefaultBundle bundle = new DefaultBundle(this);
+
+        bundle.index = bundles.size();
+        bundle.setId(String.valueOf(bundle.index));
+
         bundles.add(bundle);
         return bundle;
     }

@@ -27,7 +27,7 @@ import cz.ufal.udapi.core.Node;
 public class DeleteCommas extends Block {
 
     @Override
-    public void processNode(Node node, int bundleNo) {
+    public void processNode(Node node) {
         if (",".equals(node.getLemma())) {
             node.remove();
         }

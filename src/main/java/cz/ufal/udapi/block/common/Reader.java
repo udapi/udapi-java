@@ -104,7 +104,6 @@ public abstract class Reader extends Block {
         while (root.isPresent()) {
             Root tree = root.get();
 
-
             boolean addToTheLastBundle = false;
 
             String treeId = tree.getId();

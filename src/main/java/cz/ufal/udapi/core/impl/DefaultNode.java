@@ -145,7 +145,6 @@ public class DefaultNode implements Node {
 
     protected Node createNode() {
         DefaultNode newNode = new DefaultNode(tree);
-        //if (isRoot())
         tree.getDescendants().add(newNode);
         newNode.ord = tree.getDescendants().size();
         return newNode;

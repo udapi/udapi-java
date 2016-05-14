@@ -29,7 +29,7 @@ public class ToPositions extends Block {
     private static final String ADP = "ADP";
 
     @Override
-    public void processNode(Node node, int bundleNo) {
+    public void processNode(Node node) {
         if (node.getParent().isPresent()) {
             if (ADP.equals(node.getUpos()) && node.precedes(node.getParent().get())) {
                 node.shiftAfterSubtree(node.getParent().get());

@@ -83,7 +83,7 @@ public class TextModeTrees extends Block {
     }
 
     @Override
-    public void processTree(Root xtree, int bundleNo) {
+    public void processTree(Root xtree) {
 
         Map<Integer, Node> tree = new HashMap<>();
 

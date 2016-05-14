@@ -70,14 +70,12 @@ public class Block {
      * @param document document to process
      */
     public void processDocument(Document document) {
-        int bundleNo = 1;
         for (Bundle bundle : document.getBundles()) {
-            if (shouldProcessBundle(bundle, bundleNo)) {
-                beforeProcessBundle(bundle, bundleNo);
-                processBundle(bundle, bundleNo);
-                afterProcessBundle(bundle, bundleNo);
+            if (shouldProcessBundle(bundle)) {
+                beforeProcessBundle(bundle);
+                processBundle(bundle);
+                afterProcessBundle(bundle);
             }
-            bundleNo++;
         }
     }
 
@@ -92,10 +90,9 @@ public class Block {
     /**
      *
      * @param bundle bundle to process
-     * @param bundleNo bundle number
      * @return true if the bundle with given bundle number should be processed
      */
-    protected boolean shouldProcessBundle(Bundle bundle, int bundleNo) {
+    protected boolean shouldProcessBundle(Bundle bundle) {
         return true;
     }
 
@@ -112,21 +109,19 @@ public class Block {
      * Called before bundle processing.
      *
      * @param bundle bundle to process
-     * @param bundleNo bundle number
      */
-    public void beforeProcessBundle(Bundle bundle, int bundleNo) {
+    public void beforeProcessBundle(Bundle bundle) {
     }
 
     /**
      * The main method for bundle processing.
      *
      * @param bundle bundle to process
-     * @param bundleNo bundle number
      */
-    public void processBundle(Bundle bundle, int bundleNo) {
+    public void processBundle(Bundle bundle) {
         for (Root tree : bundle.getTrees()) {
             if (shouldProcessTree(tree)) {
-                processTree(tree, bundleNo);
+                processTree(tree);
             }
         }
     }
@@ -135,31 +130,26 @@ public class Block {
      * Called after bundle processing.
      *
      * @param bundle bundle to process
-     * @param bundleNo bundle number
      */
-    public void afterProcessBundle(Bundle bundle, int bundleNo) {
+    public void afterProcessBundle(Bundle bundle) {
     }
 
     /**
      * The main method for tree processing.
      *
      * @param tree tree to process
-     * @param bundleNo bundle number
      */
-    public void processTree(Root tree, int bundleNo) {
+    public void processTree(Root tree) {
         //wrap with ArrayList to prevent ConcurrentModificationException
-        for (Node node : new ArrayList<>(tree.getDescendants())) {
-            processNode(node, bundleNo);
-        }
+        new ArrayList<>(tree.getDescendants()).forEach(this::processNode);
     }
 
     /**
      * The main method for node processing.
      *
      * @param node node to process
-     * @param bundleNo bundle number
      */
-    public void processNode(Node node, int bundleNo) {
+    public void processNode(Node node) {
         throw new RuntimeException("Block doesn't implement or override any of process* methods.");
     }
 }

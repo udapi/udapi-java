@@ -49,24 +49,24 @@ public class Treex extends Block {
     }
 
     @Override
-    public void beforeProcessBundle(Bundle bundle, int bundleNo) {
-        ps.println("    <LM id=\"s" + bundleNo + "\">\n" +
+    public void beforeProcessBundle(Bundle bundle) {
+        ps.println("    <LM id=\"s" + bundle.getNumber() + "\">\n" +
                 "      <zones>");
     }
 
     @Override
-    public void afterProcessBundle(Bundle bundle, int bundleNo) {
+    public void afterProcessBundle(Bundle bundle) {
         ps.println("      </zones>\n    </LM>");
     }
 
     @Override
-    public void processTree(Root tree, int bundleNo) {
+    public void processTree(Root tree) {
         StringBuilder rootId = new StringBuilder("a-");
-        rootId.append(bundleNo);
+        rootId.append(tree.getBundle().getNumber());
         String sentence = tree.getSentence();
         String language = "und"; //TODO: selector
         StringBuilder treeId = new StringBuilder("s");
-        treeId.append(bundleNo).append("-").append(language);
+        treeId.append(tree.getBundle().getNumber()).append("-").append(language);
         String in = SPACES_8;
         StringBuilder say = new StringBuilder(in);
         say.append("<zone language='").append(language).append("'>\n");

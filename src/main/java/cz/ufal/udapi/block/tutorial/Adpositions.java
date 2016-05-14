@@ -33,7 +33,7 @@ public class Adpositions extends Block {
     private static final String ADP = "ADP";
 
     @Override
-    public void processNode(Node node, int bundleNo) {
+    public void processNode(Node node) {
         // TODO: Your task: distinguish prepositions and postpositions
         if (ADP.equals(node.getUpos())) {
             prepositions++;

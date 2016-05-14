@@ -20,7 +20,7 @@ public class DefaultBundle implements Bundle {
     private List<Root> trees = new ArrayList<>();
     private Document document;
     private String id;
-    private int index = -1;
+    int index = -1;
 
     public DefaultBundle(Document document) {
         this.document = document;
