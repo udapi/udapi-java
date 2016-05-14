@@ -128,4 +128,11 @@ public interface Root {
      * @return address of the tree
      */
     String getAddress();
+
+    /**
+     * Creates new child of the root and returns it.
+     *
+     * @return new child
+     */
+    Node createChild();
 }
