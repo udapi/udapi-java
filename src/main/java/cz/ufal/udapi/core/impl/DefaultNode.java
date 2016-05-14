@@ -53,8 +53,9 @@ public class DefaultNode implements Node {
         remove(EnumSet.noneOf(Node.RemoveArg.class));
     }
 
-    private String getAddress() {
-        return getTree().getBundle().getId() + "-" + getOrd();
+    @Override
+    public String getAddress() {
+        return getRoot().getAddress() + "#" + getOrd();
     }
 
     @Override
@@ -80,7 +81,7 @@ public class DefaultNode implements Node {
             allNodes.removeAll(toRemove);
 
             //update ord of the nodes in the tree
-            getTree().normalizeOrder();
+            getRoot().normalizeOrder();
         }
 
         //Disconnect the node from its parent (& siblings) and delete all attributes
@@ -102,7 +103,7 @@ public class DefaultNode implements Node {
     }
 
     @Override
-    public Root getTree() {
+    public Root getRoot() {
         return tree;
     }
 

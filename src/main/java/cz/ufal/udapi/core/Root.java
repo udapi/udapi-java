@@ -122,4 +122,10 @@ public interface Root {
      * Validates if the zone is in correct format.
      */
     void validateZone();
+
+    /**
+     *
+     * @return address of the tree
+     */
+    String getAddress();
 }

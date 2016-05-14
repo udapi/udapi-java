@@ -187,7 +187,7 @@ public class CoNLLUReader implements DocumentReader {
         // treeId should contain bundleId/zone.
         // The "/zone" part is optional. If missing, zone='und' is used for the new tree.
         if (null == treeId) {
-            Bundle newBundle = document.addBundle();
+            Bundle newBundle = document.createBundle();
             newBundle.addTree(tree);
             newBundle.setId(String.valueOf(sentenceId));
         } else {
@@ -205,13 +205,13 @@ public class CoNLLUReader implements DocumentReader {
             }
 
             if (document.getBundles().isEmpty()) {
-                Bundle newBundle = document.addBundle();
+                Bundle newBundle = document.createBundle();
                 newBundle.setId(bundleId);
                 newBundle.addTree(tree);
             } else {
                 Bundle lastBundle = document.getBundles().get(document.getBundles().size() - 1);
                 if (null != bundleId && !bundleId.equals(lastBundle)) {
-                    Bundle newBundle = document.addBundle();
+                    Bundle newBundle = document.createBundle();
                     newBundle.setId(bundleId);
                     newBundle.addTree(tree);
                 } else {

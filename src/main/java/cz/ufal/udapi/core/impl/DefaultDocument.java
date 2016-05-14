@@ -49,7 +49,7 @@ public class DefaultDocument implements Document {
      * @return bundle added to document.
      */
     @Override
-    public Bundle addBundle() {
+    public Bundle createBundle() {
         Bundle bundle = new DefaultBundle(this);
         bundles.add(bundle);
         return bundle;

@@ -367,7 +367,7 @@ public interface Node {
      *
      * @return tree of the sentence the node is part of
      */
-    Root getTree();
+    Root getRoot();
 
     /**
      *
@@ -380,4 +380,10 @@ public interface Node {
      * @return document the node belongs to
      */
     Document getDocument();
+
+    /**
+     *
+     * @return address of the node
+     */
+    String getAddress();
 }

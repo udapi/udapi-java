@@ -6,6 +6,7 @@ import cz.ufal.udapi.core.Root;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementation of Bundle.
@@ -19,6 +20,7 @@ public class DefaultBundle implements Bundle {
     private List<Root> trees = new ArrayList<>();
     private Document document;
     private String id;
+    private int index = -1;
 
     public DefaultBundle(Document document) {
         this.document = document;
@@ -30,7 +32,7 @@ public class DefaultBundle implements Bundle {
     }
 
     @Override
-    public Root addTree() {
+    public Root createTree() {
         Root tree = new DefaultRoot(document, this);
         trees.add(tree);
         return tree;
@@ -58,5 +60,21 @@ public class DefaultBundle implements Bundle {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public Optional<Root> getTree(String zone) {
+        return trees.stream().filter(tree -> tree.getZone().equals(zone)).findFirst();
+    }
+
+    @Override
+    public void remove() {
+        document.getBundles().remove(this);
+        document = null;
+    }
+
+    @Override
+    public int getNumber() {
+        return index;
     }
 }

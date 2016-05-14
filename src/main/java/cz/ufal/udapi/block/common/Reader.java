@@ -93,7 +93,7 @@ public abstract class Reader extends Block {
             if (!originalBundles.isEmpty()) {
                 bundle = originalBundles.remove(0);
             } else {
-                bundle = document.addBundle();
+                bundle = document.createBundle();
                 bundleNo++;
             }
             bundle.addTree(buffer.get());
@@ -149,7 +149,7 @@ public abstract class Reader extends Block {
                         System.err.println("Mismach in bundle IDs: " + bundle.getId() + " vs " + lastBundleId + ". Keeping the former one.");
                     }
                 } else {
-                    bundle = document.addBundle();
+                    bundle = document.createBundle();
                     if (null == lastBundleId || "".equals(lastBundleId)) {
                         bundle.setId(String.valueOf(sentenceId));
                     } else {

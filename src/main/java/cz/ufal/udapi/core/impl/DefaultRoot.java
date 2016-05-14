@@ -114,6 +114,11 @@ public class DefaultRoot implements Root {
         }
     }
 
+    @Override
+    public String getAddress() {
+        return bundle.getId() + ("".equals(zone) ? "" : "/" + zone);
+    }
+
     private void copySubtree(Node oldNode, Node newNode) {
         for (Node child : oldNode.getChildren()) {
             Node newChild = newNode.createChild();
@@ -156,4 +161,6 @@ public class DefaultRoot implements Root {
     public String getSentence() {
         return text;
     }
+
+
 }

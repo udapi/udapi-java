@@ -1,6 +1,7 @@
 package cz.ufal.udapi.core;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents bundle. Bundle is a collection of sentence trees.
@@ -20,7 +21,7 @@ public interface Bundle {
      *
      * @return created tree
      */
-    Root addTree();
+    Root createTree();
 
     /**
      * Returns list of sentence trees.
@@ -54,4 +55,24 @@ public interface Bundle {
      * @param id new ID of the bundle
      */
     void setId(String id);
+
+    /**
+     * Returns tree with given zone.
+     *
+     * @param zone zone to search for
+     * @return tree with given zone
+     */
+    Optional<Root> getTree(String zone);
+
+    /**
+     * Removes bundle from the document.
+     */
+    void remove();
+
+    /**
+     * Returns index of the bundle.
+     *
+     * @return index of the bundle
+     */
+    int getNumber();
 }

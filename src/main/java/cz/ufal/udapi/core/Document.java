@@ -27,7 +27,7 @@ public interface Document {
      *
      * @return new bundle added to the document
      */
-    Bundle addBundle();
+    Bundle createBundle();
 
     /**
      *
