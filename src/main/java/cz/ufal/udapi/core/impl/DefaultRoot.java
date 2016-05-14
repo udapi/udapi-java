@@ -124,6 +124,46 @@ public class DefaultRoot implements Root {
         return node.createChild();
     }
 
+    @Override
+    public String getForm() {
+        return node.getForm();
+    }
+
+    @Override
+    public String getLemma() {
+        return node.getLemma();
+    }
+
+    @Override
+    public String getUpos() {
+        return node.getUpos();
+    }
+
+    @Override
+    public String getXpos() {
+        return node.getXpos();
+    }
+
+    @Override
+    public String getFeats() {
+        return node.getFeats();
+    }
+
+    @Override
+    public String getDeprel() {
+        return node.getDeprel();
+    }
+
+    @Override
+    public String getDeps() {
+        return node.getDeps();
+    }
+
+    @Override
+    public String getMisc() {
+        return node.getMisc();
+    }
+
     private void copySubtree(Node oldNode, Node newNode) {
         for (Node child : oldNode.getChildren()) {
             Node newChild = newNode.createChild();

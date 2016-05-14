@@ -135,4 +135,53 @@ public interface Root {
      * @return new child
      */
     Node createChild();
+
+    /**
+     *
+     * @return form of the node
+     */
+    String getForm();
+
+    /**
+     *
+     * @return lemma of the node
+     */
+    String getLemma();
+
+    /**
+     *
+     * @return upos of the node
+     */
+    String getUpos();
+
+    /**
+     *
+     * @return xpos of the node
+     */
+    String getXpos();
+
+    /**
+     *
+     * @return feats of the node
+     */
+    String getFeats();
+
+    /**
+     *
+     * @return deprel of the node
+     */
+    String getDeprel();
+
+    /**
+     *
+     * @return deps of the node
+     */
+    String getDeps();
+
+    /**
+     *
+     * @return misc of the node
+     */
+    String getMisc();
+
 }
