@@ -9,7 +9,7 @@ import java.util.Optional;
 public class RehangPrepositions extends Block {
 
     @Override
-    public void processNode(Node node, int bundleNo) {
+    public void processNode(Node node) {
 
         if ("ADP".equals(node.getUpos())) {
             Optional<Node> origParent = node.getParent();
