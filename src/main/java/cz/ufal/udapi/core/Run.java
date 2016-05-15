@@ -107,7 +107,6 @@ public class Run {
                 block.afterProcessDocument(newDocument);
             }
 
-            //TODO:
             wasLastDocument = true;
         }
 
