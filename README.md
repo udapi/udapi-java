@@ -12,7 +12,7 @@ Udapi - a framework for processing Universal Dependencies
 
 Udapi is API for processing UD (Universal Dependencies) data.
 See [http://udapi.github.io](http://udapi.github.io) and [http://universaldependencies.org](http://universaldependencies.org).
-This distribution is a Perl implementation of the Udapi framework.
+This distribution is a Java implementation of the Udapi framework.
 
 # AUTHOR
 
