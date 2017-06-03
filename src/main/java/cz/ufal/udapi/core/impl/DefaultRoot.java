@@ -29,6 +29,11 @@ public class DefaultRoot implements Root {
     private List<Node> descendants = new ArrayList<>();
     private String text;
     private String id;
+    private String sentId;
+    private String newParId;
+    private String newDocId;
+    private boolean isNewDoc;
+    private boolean isNewPar;
 
     public DefaultRoot(Document document) {
         this.document = document;
@@ -81,6 +86,23 @@ public class DefaultRoot implements Root {
     }
 
     @Override
+    public void setSentId(String sentId) {
+        if (null != bundle) {
+            String[] parts = sentId.split("/", 1);
+            bundle.setId(parts[0]);
+            if (2 == parts.length) {
+                setZone(parts[1]);
+            }
+            this.sentId = sentId;
+        }
+    }
+
+    @Override
+    public String getSentId() {
+        return sentId;
+    }
+
+    @Override
     public void setZone(String zone) {
         this.zone = zone;
     }
@@ -114,9 +136,27 @@ public class DefaultRoot implements Root {
         }
     }
 
+    /**
+     * Full (document-wide) id of the root.
+     *
+     * The general format of root nodes is:
+     * root.bundle.id + '/' + root.zone, e.g. s123/en_udpipe.
+     * If zone is empty, the slash is excluded as well, e.g. s123.
+     * If bundle is missing (could occur during loading), '?' is used instead.
+     * Root's address is stored in CoNLL-U files as sent_id (in a special comment).
+     *
+     * @return address of the root node
+     */
     @Override
     public String getAddress() {
-        return bundle.getId() + ("".equals(zone) ? "" : "/" + zone);
+        String zone = "/" + (this.zone != null ? this.zone : "");
+        if (null != bundle) {
+            return getBundle().getAddress() + zone;
+        } else if (null != sentId) {
+            return sentId + zone;
+        } else {
+            return "?" + zone;
+        }
     }
 
     @Override
@@ -162,6 +202,46 @@ public class DefaultRoot implements Root {
     @Override
     public String getMisc() {
         return node.getMisc();
+    }
+
+    @Override
+    public void setNewParId(String newParId) {
+        this.newParId = newParId;
+    }
+
+    @Override
+    public String getNewParId() {
+        return newParId;
+    }
+
+    @Override
+    public void setNewDocId(String newDocId) {
+        this.newDocId = newDocId;
+    }
+
+    @Override
+    public String getNewDocId() {
+        return newDocId;
+    }
+
+    @Override
+    public boolean isNewDoc() {
+        return isNewDoc;
+    }
+
+    @Override
+    public void setNewDoc(boolean newDoc) {
+        isNewDoc = newDoc;
+    }
+
+    @Override
+    public boolean isNewPar() {
+        return isNewPar;
+    }
+
+    @Override
+    public void setNewPar(boolean newPar) {
+        isNewPar = newPar;
     }
 
     private void copySubtree(Node oldNode, Node newNode) {

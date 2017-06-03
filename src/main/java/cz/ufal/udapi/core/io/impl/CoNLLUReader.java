@@ -33,9 +33,12 @@ public class CoNLLUReader implements DocumentReader {
     private static final String EMPTY_STRING = "";
     private static final String TAB = "\\t";
     private static final String DASH = "-";
+    private static final String NEWPAR = "newpar";
     private static final char HASH = '#';
     private static final Pattern tabPattern = Pattern.compile(TAB);
-    private static final Pattern sentIdPattern = Pattern.compile("^#\\s*sent_id\\s+(\\S+)");
+    private static final Pattern sentIdPattern = Pattern.compile("^# sent_id\\s*=?\\s*(\\S+)");
+    private static final Pattern textPattern = Pattern.compile("^# text\\s*=\\s*(.+)");
+    private static final Pattern newParDocPattern = Pattern.compile("^# ("+NEWPAR+"|newdoc) (?:\\s*id\\s*=\\s*(.+))?");
 
     public CoNLLUReader(Reader reader) {
         this.reader = reader;
@@ -247,16 +250,40 @@ public class CoNLLUReader implements DocumentReader {
 
         for (String word : words) {
             if (word.charAt(0) == HASH) {
+                //process comment
                 Matcher sentIdMatcher = sentIdPattern.matcher(word);
                 if (sentIdMatcher.matches()) {
-                    tree.setId(sentIdMatcher.group(1));
+                    tree.setSentId(sentIdMatcher.group(1));
                 } else {
-                    //comment
-                    if (word.length() > 1) {
-                        tree.addComment(word.substring(1));
+
+                    Matcher textMatcher = textPattern.matcher(word);
+                    if (textMatcher.matches()) {
+                        tree.setSentence(textMatcher.group(1));
                     } else {
-                        tree.addComment(EMPTY_STRING);
+
+                        Matcher newParDocMatcher = newParDocPattern.matcher(word);
+                        if (newParDocMatcher.matches()) {
+                            if (newParDocMatcher.group(1).equals(NEWPAR)) {
+                                tree.setNewPar(true);
+                                if (newParDocMatcher.groupCount() > 1) {
+                                    tree.setNewParId(newParDocMatcher.group(2));
+                                }
+                            } else {
+                                tree.setNewDoc(true);
+                                if (newParDocMatcher.groupCount() > 1) {
+                                    tree.setNewDocId(newParDocMatcher.group(2));
+                                }
+                            }
+                        }
                     }
+
+                }
+
+                //comment
+                if (word.length() > 1) {
+                    tree.addComment(word.substring(1));
+                } else {
+                    tree.addComment(EMPTY_STRING);
                 }
             } else {
                 //process word
@@ -292,7 +319,7 @@ public class CoNLLUReader implements DocumentReader {
             misc = fields[9];
         }
 
-        if (-1 == id.indexOf(DASH)) {
+        if (!id.contains(DASH)) {
             Node child = root.createChild();
             child.setForm(form);
             child.setLemma(lemma);

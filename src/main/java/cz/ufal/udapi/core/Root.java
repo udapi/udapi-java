@@ -37,6 +37,14 @@ public interface Root {
      */
     Bundle getBundle();
 
+    boolean isNewDoc();
+
+    void setNewDoc(boolean newDoc);
+
+    boolean isNewPar();
+
+    void setNewPar(boolean newPar);
+
     /**
      * Add comment to the sentence.
      *
@@ -87,6 +95,18 @@ public interface Root {
      * @return descendants of the node
      */
     List<Node> getDescendants();
+
+    /**
+     *
+     * @param sentId new sent id
+     */
+    void setSentId(String sentId);
+
+    /**
+     *
+     * @return sent id of the root
+     */
+    String getSentId();
 
     /**
      *
@@ -183,5 +203,21 @@ public interface Root {
      * @return misc of the node
      */
     String getMisc();
+
+    void setNewParId(String newParId);
+
+    /**
+     *
+     * @return newpar of the node
+     */
+    String getNewParId();
+
+    void setNewDocId(String newDocId);
+
+    /**
+     *
+     * @return newdoc of the node
+     */
+    String getNewDocId();
 
 }

@@ -75,4 +75,10 @@ public interface Bundle {
      * @return index of the bundle
      */
     int getNumber();
+
+    /**
+     *
+     * @return address of the bundle
+     */
+    String getAddress();
 }

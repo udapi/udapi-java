@@ -77,4 +77,13 @@ public class DefaultBundle implements Bundle {
     public int getNumber() {
         return index;
     }
+
+    /**
+     *
+     * @return bundle id or '?' if missing
+     */
+    @Override
+    public String getAddress() {
+        return id != null ? id : "?";
+    }
 }
