@@ -264,12 +264,12 @@ public class CoNLLUReader implements DocumentReader {
                         Matcher newParDocMatcher = newParDocPattern.matcher(word);
                         if (newParDocMatcher.matches()) {
                             if (newParDocMatcher.group(1).equals(NEWPAR)) {
-                                tree.setNewPar(true);
+                                tree.setIsNewPar(true);
                                 if (newParDocMatcher.groupCount() > 1) {
                                     tree.setNewParId(newParDocMatcher.group(2));
                                 }
                             } else {
-                                tree.setNewDoc(true);
+                                tree.setIsNewDoc(true);
                                 if (newParDocMatcher.groupCount() > 1) {
                                     tree.setNewDocId(newParDocMatcher.group(2));
                                 }

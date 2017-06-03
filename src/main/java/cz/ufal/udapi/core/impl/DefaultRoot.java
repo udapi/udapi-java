@@ -230,8 +230,8 @@ public class DefaultRoot implements Root {
     }
 
     @Override
-    public void setNewDoc(boolean newDoc) {
-        isNewDoc = newDoc;
+    public void setIsNewDoc(boolean isNewDoc) {
+        this.isNewDoc = isNewDoc;
     }
 
     @Override
@@ -240,8 +240,8 @@ public class DefaultRoot implements Root {
     }
 
     @Override
-    public void setNewPar(boolean newPar) {
-        isNewPar = newPar;
+    public void setIsNewPar(boolean isNewPar) {
+        this.isNewPar = isNewPar;
     }
 
     private void copySubtree(Node oldNode, Node newNode) {

@@ -39,11 +39,11 @@ public interface Root {
 
     boolean isNewDoc();
 
-    void setNewDoc(boolean newDoc);
+    void setIsNewDoc(boolean isNewDoc);
 
     boolean isNewPar();
 
-    void setNewPar(boolean newPar);
+    void setIsNewPar(boolean isNewPar);
 
     /**
      * Add comment to the sentence.
