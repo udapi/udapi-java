@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Represents multi-word token in UD tree.
  */
-public class DefaultMwt implements Mwt {
+public class DefaultMultiwordToken implements MultiwordToken {
     private List<Node> words = new ArrayList<>();
     private String form;
     private Misc misc;

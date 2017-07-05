@@ -391,11 +391,11 @@ public interface Node {
      *
      * @return associated Mwt node
      */
-    Optional<Mwt> getMwt();
+    Optional<MultiwordToken> getMwt();
 
     /**
      *
      * @param mwt Mwt node the node is associated with
      */
-    void setMwt(Mwt mwt);
+    void setMwt(MultiwordToken mwt);
 }

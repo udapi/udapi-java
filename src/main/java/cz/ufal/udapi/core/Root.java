@@ -72,7 +72,7 @@ public interface Root {
      *
      * @return mutltiwords belonging to the sentence.
      */
-    List<Mwt> getMultiwords();
+    List<MultiwordToken> getMultiwords();
 
     /**
      * Sets sentence in plain text.

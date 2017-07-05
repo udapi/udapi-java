@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by mvojtek on 05/07/2017.
  */
-public interface Mwt {
+public interface MultiwordToken {
     String getForm();
 
     Misc getMisc();

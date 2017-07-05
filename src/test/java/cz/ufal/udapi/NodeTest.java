@@ -60,7 +60,7 @@ public class NodeTest {
     }
 
     @Test
-    public void testMwt() throws Exception {
+    public void testMultiwordToken() throws Exception {
         String documentPath = "mwt_test.conllu";
 
         //test read
@@ -76,7 +76,7 @@ public class NodeTest {
 
         assertEquals(1, tree.getMultiwords().size());
 
-        Mwt mwt = tree.getMultiwords().get(0);
+        MultiwordToken mwt = tree.getMultiwords().get(0);
         assertEquals("aby", mwt.getForm());
         assertEquals(2, mwt.getWords().size());
         assertEquals("aby", mwt.getWords().get(0).getForm());

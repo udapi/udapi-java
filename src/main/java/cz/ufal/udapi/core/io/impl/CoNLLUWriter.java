@@ -153,7 +153,7 @@ public class CoNLLUWriter implements DocumentWriter {
             for (Node descendant : descendants) {
 
                 //multiword
-                Optional<Mwt> mwt = descendant.getMwt();
+                Optional<MultiwordToken> mwt = descendant.getMwt();
                 if (mwt.isPresent() && descendant.getOrd()  >lastMwtId) {
                     List<Node> words = mwt.get().getWords();
                     lastMwtId = words.get(words.size()-1).getOrd();

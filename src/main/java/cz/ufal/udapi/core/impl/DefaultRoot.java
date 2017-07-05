@@ -22,7 +22,7 @@ public class DefaultRoot implements Root {
     private String zone = Root.DEFAULT_ZONE;
 
     private List<String> comments = new ArrayList<>();
-    private List<Mwt> multiwords = new ArrayList<>();
+    private List<MultiwordToken> multiwords = new ArrayList<>();
     private List<Node> descendants = new ArrayList<>();
     private List<EmptyNode> emptyNodes = new ArrayList<>();
     private String text;
@@ -284,7 +284,7 @@ public class DefaultRoot implements Root {
 
     @Override
     public void addMultiword(List<Node> words, String form, String misc) {
-        Mwt newMwt = new DefaultMwt();
+        MultiwordToken newMwt = new DefaultMultiwordToken();
         newMwt.setWords(words);
         newMwt.setForm(form);
         newMwt.setMisc(misc);
@@ -295,7 +295,7 @@ public class DefaultRoot implements Root {
         this.multiwords.add(newMwt);
     }
 
-    public List<Mwt> getMultiwords() {
+    public List<MultiwordToken> getMultiwords() {
         return multiwords;
     }
 
