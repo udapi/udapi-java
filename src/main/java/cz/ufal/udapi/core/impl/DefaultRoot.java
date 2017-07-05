@@ -282,7 +282,7 @@ public class DefaultRoot implements Root {
 
     @Override
     public void addMultiword(List<Node> words, String form, String misc) {
-        Mwt newMwt = new Mwt();
+        Mwt newMwt = new DefaultMwt();
         newMwt.setWords(words);
         newMwt.setForm(form);
         newMwt.setMisc(misc);

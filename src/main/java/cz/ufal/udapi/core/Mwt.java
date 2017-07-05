@@ -1,61 +1,24 @@
 package cz.ufal.udapi.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mvojtek on 05/07/2017.
- *
- * Represents multi-word token in UD tree.
  */
-public class Mwt {
-    private List<Node> words = new ArrayList<>();
-    private String form;
-    private Misc misc;
-    private Root root;
+public interface Mwt {
+    String getForm();
 
-    public String getForm() {
-        return form;
-    }
+    Misc getMisc();
 
-    public Misc getMisc() {
-        return misc;
-    }
+    void setWords(List<Node> words);
 
-    public void setWords(List<Node> words) {
-        this.words.clear();
-        if (null != words) {
-            this.words.addAll(words);
-        }
-    }
+    void setRoot(Root root);
 
-    public void setRoot(Root root) {
-        this.root = root;
-    }
+    void setForm(String form);
 
-    public void setForm(String form) {
-        this.form = form;
-    }
+    void setMisc(String misc);
 
-    public void setMisc(String misc) {
-        this.misc = new Misc(misc);
-    }
+    String getOrdRange();
 
-    public String getOrdRange() {
-        if (words.isEmpty()) {
-            return "?-?";
-        } else {
-            return String.format("%d-%d", words.get(0).getOrd(), words.get(words.size()-1).getOrd());
-        }
-    }
-
-    public String getAddresss() {
-        String rootAddress = "?";
-        if (null != root) {
-            rootAddress = root.getAddress();
-        }
-        return rootAddress + "#" + getOrdRange();
-    }
-
-
+    String getAddresss();
 }

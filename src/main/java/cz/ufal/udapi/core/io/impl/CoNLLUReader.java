@@ -3,7 +3,7 @@ package cz.ufal.udapi.core.io.impl;
 import cz.ufal.udapi.core.*;
 import cz.ufal.udapi.core.impl.DefaultDocument;
 import cz.ufal.udapi.core.impl.DefaultEmptyNode;
-import cz.ufal.udapi.core.impl.DefaultNode;
+import cz.ufal.udapi.core.impl.DefaultEnhancedDeps;
 import cz.ufal.udapi.core.impl.DefaultRoot;
 import cz.ufal.udapi.core.io.DocumentReader;
 import cz.ufal.udapi.core.io.UdapiIOException;
@@ -354,7 +354,7 @@ public class CoNLLUReader implements DocumentReader {
             newEmptyNode.setFeats(feats);
             newEmptyNode.setHead(head);
             newEmptyNode.setDeprel(deprel);
-            newEmptyNode.setDeps(new EnhancedDeps(deps, tree));
+            newEmptyNode.setDeps(new DefaultEnhancedDeps(deps, tree));
             newEmptyNode.setMisc(misc);
             newEmptyNode.setEmptyNodeId(id);
 
@@ -368,7 +368,7 @@ public class CoNLLUReader implements DocumentReader {
             child.setFeats(feats);
             child.setHead(head);
             child.setDeprel(deprel);
-            child.setDeps(new EnhancedDeps(deps, tree));
+            child.setDeps(new DefaultEnhancedDeps(deps, tree));
             child.setMisc(misc);
 
             nodes.add(child);
