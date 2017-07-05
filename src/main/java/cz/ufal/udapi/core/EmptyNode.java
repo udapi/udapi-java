@@ -7,4 +7,6 @@ public interface EmptyNode extends Node {
     public String getEmptyNodeId();
 
     public void setEmptyNodeId(String id);
+
+    public int getEmptyNodePrefixId();
 }

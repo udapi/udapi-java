@@ -115,7 +115,7 @@ public class CoNLLUReader implements DocumentReader {
 
         executor.shutdown();
         try {
-            executor.awaitTermination(5, TimeUnit.SECONDS);
+            executor.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             System.err.println("Wait for executor termination interrupted.");
         }
@@ -253,10 +253,13 @@ public class CoNLLUReader implements DocumentReader {
 
         for (String word : words) {
             if (word.charAt(0) == HASH) {
+
+                boolean processedComment = false;
                 //process comment
                 Matcher sentIdMatcher = sentIdPattern.matcher(word);
                 if (sentIdMatcher.matches()) {
                     tree.setSentId(sentIdMatcher.group(1));
+                    processedComment = true;
                 } else {
 
                     Matcher textMatcher = textPattern.matcher(word);
@@ -266,6 +269,7 @@ public class CoNLLUReader implements DocumentReader {
 
                         Matcher newParDocMatcher = newParDocPattern.matcher(word);
                         if (newParDocMatcher.matches()) {
+                            processedComment = true;
                             if (newParDocMatcher.group(1).equals(NEWPAR)) {
                                 tree.setIsNewPar(true);
                                 if (newParDocMatcher.groupCount() > 1) {
@@ -284,7 +288,9 @@ public class CoNLLUReader implements DocumentReader {
 
                 //comment
                 if (word.length() > 1) {
-                    tree.addComment(word.substring(1));
+                    if (!processedComment) {
+                        tree.addComment(word.substring(1));
+                    }
                 } else {
                     tree.addComment(EMPTY_STRING);
                 }
@@ -298,6 +304,7 @@ public class CoNLLUReader implements DocumentReader {
         mwtStructs.forEach(m -> {
             List<Node> wordsList = nodes.subList(m.rangeStart, m.rangeEnd+1);
             tree.addMultiword(wordsList, m.form, m.misc);
+
         });
 
         //add empty nodes to the tree

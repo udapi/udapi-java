@@ -29,7 +29,7 @@ public class DefaultNode implements Node {
     private String deprel;
     private EnhancedDeps deps;
     private String misc;
-    private Mwt mwt;
+    private Optional<Mwt> mwt = Optional.empty();
 
     private Optional<Node> firstChild = Optional.empty();
     private Optional<Node> nextSibling = Optional.empty();
@@ -707,13 +707,13 @@ public class DefaultNode implements Node {
     }
 
     @Override
-    public Mwt getMwt() {
+    public Optional<Mwt> getMwt() {
         return mwt;
     }
 
     @Override
     public void setMwt(Mwt mwt) {
-        this.mwt = mwt;
+        this.mwt = Optional.of(mwt);
     }
 
     @Override

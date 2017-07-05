@@ -14,6 +14,7 @@ import java.util.Map;
 public class DefaultEnhancedDeps implements EnhancedDeps {
 
     private static final String PIPE = "|";
+    private static final String PIPE_REGEX = "\\|";
     private static final String COLON = ":";
     private static final String UNDERSCORE = "_";
 
@@ -39,8 +40,9 @@ public class DefaultEnhancedDeps implements EnhancedDeps {
             map.put(0, new RootNodeDep(root));
             root.getDescendants().forEach(d -> map.put(d.getOrd(), new NodeDep(d)));
 
-            String[] rawDeps = stringRepresentation.split(PIPE);
+            String[] rawDeps = stringRepresentation.split(PIPE_REGEX);
             for (String rawDep : rawDeps) {
+
                 String[] fields = rawDep.split(COLON);
                 int head = Integer.parseInt(fields[0]);
                 String rel = fields[1];

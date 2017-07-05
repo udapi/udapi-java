@@ -391,7 +391,7 @@ public interface Node {
      *
      * @return associated Mwt node
      */
-    Mwt getMwt();
+    Optional<Mwt> getMwt();
 
     /**
      *

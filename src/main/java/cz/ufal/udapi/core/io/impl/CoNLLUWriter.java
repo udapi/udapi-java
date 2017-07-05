@@ -11,9 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Writer for CoNLLU format.
@@ -30,6 +28,15 @@ public class CoNLLUWriter implements DocumentWriter {
     private static final Charset utf8Charset = StandardCharsets.UTF_8;
 
     private static final int BUFFER = 256 * 1024;
+    private boolean printSentId = true;
+
+    public boolean isPrintSentId() {
+        return printSentId;
+    }
+
+    public void setPrintSentId(boolean printSentId) {
+        this.printSentId = printSentId;
+    }
 
     /**
      * Serializes document into given path.
@@ -53,36 +60,9 @@ public class CoNLLUWriter implements DocumentWriter {
 
 
             for (Bundle bundle : document.getBundles()) {
+
                 for (Root tree : bundle.getTrees()) {
-
-                    List<Node> descendants = tree.getDescendants();
-
-                    //do not write empty sentences
-                    if (descendants.size() > 0) {
-
-                        if (null != bundle.getId() && !"".equals(bundle.getId())) {
-                            sb.append("# sent_id ");
-                            sb.append(bundle.getId());
-                            sb.append(Root.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
-                            sb.append(NEW_LINE);
-                        }
-
-                        List<String> comments = tree.getComments();
-
-                        for (String comment : comments) {
-                            sb.append("#");
-                            sb.append(comment);
-                            sb.append(NEW_LINE);
-                        }
-
-                        //TODO: multiword
-
-                        for (Node descendant : descendants) {
-                            buildLine(sb, descendant);
-                            sb.append(NEW_LINE);
-                        }
-                        sb.append(NEW_LINE);
-                    }
+                    processTree(sb, tree);
                 }
                 if (sb.length() > BUFFER) {
                     fileChannel.write(ByteBuffer.wrap(sb.toString().getBytes(utf8Charset)));
@@ -106,60 +86,121 @@ public class CoNLLUWriter implements DocumentWriter {
      */
     public void writeDocument(Document document, Writer writer) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
+            StringBuilder sb = new StringBuilder();
             for (Bundle bundle : document.getBundles()) {
                 for (Root tree : bundle.getTrees()) {
-                    processTree(bufferedWriter, tree);
+                    processTree(sb, tree);
+                }
+                if (sb.length() > BUFFER) {
+                    String content = sb.toString();
+                    bufferedWriter.write(content, 0, content.length());
+                    sb.setLength(0);
                 }
             }
+            String content = sb.toString();
+            bufferedWriter.write(content, 0, content.length());
+            sb.setLength(0);
         } catch (IOException e) {
             throw new UdapiIOException(e);
         }
     }
 
-    /**
-     * Processes one sentence tree.
-     *
-     * @param bufferedWriter writer to write with
-     * @param tree tree to serialize
-     * @throws UdapiIOException If any IOException happens
-     */
-    public void processTree(BufferedWriter bufferedWriter, Root tree) throws UdapiIOException {
+    public void processTree(StringBuilder sb, Root tree) throws UdapiIOException {
         List<Node> descendants = tree.getDescendants();
         Bundle bundle = tree.getBundle();
+
         //do not write empty sentences
-        try {
-            if (descendants.size() > 0) {
+        if (descendants.size() > 0) {
 
-                if (null != bundle.getId() && !"".equals(bundle.getId())) {
-                    String sentId = "# sent_id " + bundle.getId() + (Root.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
-                    bufferedWriter.write(sentId, 0, sentId.length());
-                    bufferedWriter.newLine();
+            if (isPrintSentId()) {
+
+                if (null != tree.getNewDocId()) {
+                    sb.append("# newdoc id = "+tree.getNewDocId());
+                    sb.append(NEW_LINE);
+                }
+                if (null != tree.getNewParId()) {
+                    sb.append("# newpar id = "+tree.getNewParId());
+                    sb.append(NEW_LINE);
                 }
 
-                List<String> comments = tree.getComments();
-
-                for (String comment : comments) {
-                    bufferedWriter.write("#", 0, 1);
-                    bufferedWriter.write(comment, 0, comment.length());
-                    bufferedWriter.newLine();
+                if (null != tree.getSentId()) {
+                    String sentIdString = "# sent_id = " + tree.getSentId();
+                    sb.append(sentIdString);
+                    sb.append(NEW_LINE);
+                } else if (null != bundle.getId() && !"".equals(bundle.getId())) {
+                    sb.append("# sent_id = ");
+                    sb.append(tree.getAddress());
+                    sb.append(NEW_LINE);
                 }
-
-                //TODO: multiword
-
-                //TODO: empty word
-
-                for (Node descendant : descendants) {
-                    StringBuilder sb = new StringBuilder();
-                    buildLine(sb, descendant);
-                    String line = sb.toString();
-                    bufferedWriter.write(line, 0, line.length());
-                    bufferedWriter.newLine();
-                }
-                bufferedWriter.newLine();
             }
-        } catch (IOException e) {
-            throw new UdapiIOException("Failed to write tree " + tree.getId(), e);
+
+            List<String> comments = tree.getComments();
+
+            for (String comment : comments) {
+                sb.append("#");
+                sb.append(comment);
+                sb.append(NEW_LINE);
+            }
+
+            int lastMwtId = 0;
+            int nextEmptyNode = -1;
+            int emptyNodesIndex = 0;
+            List<EmptyNode> emptyNodes = tree.getEmptyNodes();
+            if (!emptyNodes.isEmpty()) {
+                nextEmptyNode = emptyNodes.get(0).getEmptyNodePrefixId();
+            }
+
+            for (Node descendant : descendants) {
+
+                //multiword
+                Optional<Mwt> mwt = descendant.getMwt();
+                if (mwt.isPresent() && descendant.getOrd()  >lastMwtId) {
+                    List<Node> words = mwt.get().getWords();
+                    lastMwtId = words.get(words.size()-1).getOrd();
+                    sb.append(mwt.get().toStringFormat());
+                    sb.append(NEW_LINE);
+                }
+
+                buildLine(sb, descendant);
+                sb.append(NEW_LINE);
+
+                //empty nodes
+                while (descendant.getOrd() == nextEmptyNode && emptyNodesIndex < emptyNodes.size()) {
+
+                    EmptyNode emptyNode = emptyNodes.get(emptyNodesIndex);
+                    emptyNodesIndex++;
+                    if (emptyNodesIndex < emptyNodes.size()) {
+                        nextEmptyNode = emptyNodes.get(emptyNodesIndex).getEmptyNodePrefixId();
+                    }
+
+                    buildEmptyNodeLine(sb, emptyNode);
+                    sb.append(NEW_LINE);
+                }
+            }
+            sb.append(NEW_LINE);
         }
+    }
+
+    private void buildEmptyNodeLine(StringBuilder sb, EmptyNode node) {
+        sb.append(node.getEmptyNodeId());
+        sb.append(TAB);
+        sb.append(getString(node.getForm()));
+        sb.append(TAB);
+        sb.append(getString(node.getLemma()));
+        sb.append(TAB);
+        sb.append(getString(node.getUpos()));
+        sb.append(TAB);
+        sb.append(getString(node.getXpos()));
+        sb.append(TAB);
+        sb.append(getString(node.getFeats()));
+        sb.append(TAB);
+        sb.append(UNDERSCORE);
+        sb.append(TAB);
+        sb.append(UNDERSCORE);
+        sb.append(TAB);
+        sb.append(getString(node.getDeps().toStringFormat()));
+        sb.append(TAB);
+        sb.append(getString(node.getMisc()));
     }
 
     private void buildLine(StringBuilder sb, Node node) {

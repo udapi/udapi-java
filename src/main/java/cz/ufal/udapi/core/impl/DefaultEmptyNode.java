@@ -23,4 +23,9 @@ public class DefaultEmptyNode extends DefaultNode implements EmptyNode {
     public void setEmptyNodeId(String id) {
         this.id = id;
     }
+
+    @Override
+    public int getEmptyNodePrefixId() {
+        return Integer.parseInt(id.substring(0, id.indexOf(".")));
+    }
 }

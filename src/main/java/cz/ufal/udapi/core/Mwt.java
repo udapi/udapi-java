@@ -21,4 +21,8 @@ public interface Mwt {
     String getOrdRange();
 
     String getAddresss();
+
+    List<Node> getWords();
+
+    String toStringFormat();
 }

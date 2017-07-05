@@ -27,3 +27,7 @@ jar {
         attributes 'Main-Class': 'cz.ufal.udapi.main.Main'
     }
 }
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}

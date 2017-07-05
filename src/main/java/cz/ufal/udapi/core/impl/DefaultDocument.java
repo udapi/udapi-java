@@ -16,7 +16,7 @@ import java.util.List;
 public class DefaultDocument implements Document {
     private int nodeUniqueId;
 
-    private List<Bundle> bundles = new ArrayList<>();
+    private final List<Bundle> bundles = new ArrayList<>();
 
     /**
      *

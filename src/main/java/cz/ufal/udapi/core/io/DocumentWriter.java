@@ -33,14 +33,4 @@ public interface DocumentWriter {
      */
     void writeDocument(Document document, Path outPath) throws UdapiIOException;
 
-    /**
-     * Writes tree to given writer.
-     *
-     * Writer is not closed. It is responsibility of caller to close the writer.
-     *
-     * @param bufferedWriter writer to use
-     * @param tree tree to write
-     * @throws UdapiIOException If any error occurs
-     */
-    void processTree(BufferedWriter bufferedWriter, Root tree) throws UdapiIOException;
 }

@@ -34,7 +34,13 @@ public class CoNLLU extends Block {
 
     @Override
     public void processTree(Root tree) {
-        coNLLUWriter.processTree(bufferedWriter, tree);
+        StringBuilder sb = new StringBuilder();
+        coNLLUWriter.processTree(sb, tree);
+        try {
+            bufferedWriter.write(sb.toString());
+        } catch (IOException e) {
+            throw new UdapiIOException("Failed to write tree " + tree.getId(), e);
+        }
     }
 
     @Override

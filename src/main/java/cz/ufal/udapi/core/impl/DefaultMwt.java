@@ -15,6 +15,8 @@ public class DefaultMwt implements Mwt {
     private String form;
     private Misc misc;
     private Root root;
+    private static final String TAB = "\t";
+    private static final String UNDERSCORE = "_";
 
     @Override
     public String getForm() {
@@ -32,6 +34,24 @@ public class DefaultMwt implements Mwt {
         if (null != words) {
             this.words.addAll(words);
         }
+    }
+
+    public List<Node> getWords() {
+        return words;
+    }
+
+    @Override
+    public String toStringFormat() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getOrdRange());
+        sb.append(TAB);
+        sb.append(null != form ? form : UNDERSCORE);
+        sb.append(TAB);
+        sb.append("_\t_\t_\t_\t_\t_\t_\t");
+        sb.append(null != misc ? misc.toStringFormat() : "_");
+
+        return sb.toString();
     }
 
     @Override

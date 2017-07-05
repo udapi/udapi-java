@@ -92,6 +92,8 @@ public class DefaultRoot implements Root {
                 setZone(parts[1]);
             }
             this.sentId = sentId;
+        } else {
+            this.sentId = sentId;
         }
     }
 
@@ -287,6 +289,9 @@ public class DefaultRoot implements Root {
         newMwt.setForm(form);
         newMwt.setMisc(misc);
         newMwt.setRoot(this);
+
+        words.forEach(m -> m.setMwt(newMwt));
+
         this.multiwords.add(newMwt);
     }
 
