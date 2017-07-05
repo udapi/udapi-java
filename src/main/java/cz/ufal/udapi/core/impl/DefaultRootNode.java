@@ -1,5 +1,6 @@
 package cz.ufal.udapi.core.impl;
 
+import cz.ufal.udapi.core.EnhancedDeps;
 import cz.ufal.udapi.core.Node;
 import cz.ufal.udapi.core.Root;
 
@@ -29,7 +30,7 @@ public class DefaultRootNode extends DefaultNode {
         setXpos("<ROOT>");
         setFeats("<ROOT>");
         setDeprel("<ROOT>");
-        setDeps("<ROOT>");
+        setDeps(new EnhancedDeps("_", tree));
     }
 
     @Override

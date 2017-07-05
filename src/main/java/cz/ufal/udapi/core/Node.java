@@ -256,14 +256,14 @@ public interface Node {
      *
      * @return deps of the node
      */
-    String getDeps();
+    EnhancedDeps getDeps();
 
 
     /**
      *
      * @param deps new deps of the node
      */
-    void setDeps(String deps);
+    void setDeps(EnhancedDeps deps);
 
     /**
      *
@@ -386,4 +386,16 @@ public interface Node {
      * @return address of the node
      */
     String getAddress();
+
+    /**
+     *
+     * @return associated Mwt node
+     */
+    Mwt getMwt();
+
+    /**
+     *
+     * @param mwt Mwt node the node is associated with
+     */
+    void setMwt(Mwt mwt);
 }

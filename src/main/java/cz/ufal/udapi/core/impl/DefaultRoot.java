@@ -1,9 +1,6 @@
 package cz.ufal.udapi.core.impl;
 
-import cz.ufal.udapi.core.Bundle;
-import cz.ufal.udapi.core.Document;
-import cz.ufal.udapi.core.Root;
-import cz.ufal.udapi.core.Node;
+import cz.ufal.udapi.core.*;
 import cz.ufal.udapi.core.io.UdapiIOException;
 
 import java.util.ArrayList;
@@ -25,8 +22,9 @@ public class DefaultRoot implements Root {
     private String zone = Root.DEFAULT_ZONE;
 
     private List<String> comments = new ArrayList<>();
-    private List<String> multiwords = new ArrayList<>();
+    private List<Mwt> multiwords = new ArrayList<>();
     private List<Node> descendants = new ArrayList<>();
+    private List<EmptyNode> emptyNodes = new ArrayList<>();
     private String text;
     private String id;
     private String sentId;
@@ -195,7 +193,7 @@ public class DefaultRoot implements Root {
     }
 
     @Override
-    public String getDeps() {
+    public EnhancedDeps getDeps() {
         return node.getDeps();
     }
 
@@ -222,6 +220,19 @@ public class DefaultRoot implements Root {
     @Override
     public String getNewDocId() {
         return newDocId;
+    }
+
+    @Override
+    public List<EmptyNode> getEmptyNodes() {
+        return emptyNodes;
+    }
+
+    @Override
+    public void setEmptyNodes(List<EmptyNode> emptyNodes) {
+        this.emptyNodes.clear();
+        if (null != emptyNodes) {
+            this.emptyNodes.addAll(emptyNodes);
+        }
     }
 
     @Override
@@ -269,11 +280,17 @@ public class DefaultRoot implements Root {
         return comments;
     }
 
-    public void addMultiword(String multiword) {
-        this.multiwords.add(multiword);
+    @Override
+    public void addMultiword(List<Node> words, String form, String misc) {
+        Mwt newMwt = new Mwt();
+        newMwt.setWords(words);
+        newMwt.setForm(form);
+        newMwt.setMisc(misc);
+        newMwt.setRoot(this);
+        this.multiwords.add(newMwt);
     }
 
-    public List<String> getMultiwords() {
+    public List<Mwt> getMultiwords() {
         return multiwords;
     }
 

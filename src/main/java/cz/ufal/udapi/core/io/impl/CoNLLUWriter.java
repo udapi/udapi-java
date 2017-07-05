@@ -40,7 +40,7 @@ public class CoNLLUWriter implements DocumentWriter {
     @Override
     public void writeDocument(Document document, Path path) {
 
-        Set options = new HashSet();
+        Set<StandardOpenOption> options = new HashSet<>();
         options.add(StandardOpenOption.CREATE);
         options.add(StandardOpenOption.WRITE);
         options.add(StandardOpenOption.TRUNCATE_EXISTING);
@@ -63,7 +63,7 @@ public class CoNLLUWriter implements DocumentWriter {
                         if (null != bundle.getId() && !"".equals(bundle.getId())) {
                             sb.append("# sent_id ");
                             sb.append(bundle.getId());
-                            sb.append(tree.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
+                            sb.append(Root.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
                             sb.append(NEW_LINE);
                         }
 
@@ -131,7 +131,7 @@ public class CoNLLUWriter implements DocumentWriter {
             if (descendants.size() > 0) {
 
                 if (null != bundle.getId() && !"".equals(bundle.getId())) {
-                    String sentId = "# sent_id " + bundle.getId() + (tree.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
+                    String sentId = "# sent_id " + bundle.getId() + (Root.DEFAULT_ZONE.equals(tree.getZone()) ? "" : "/" + tree.getZone());
                     bufferedWriter.write(sentId, 0, sentId.length());
                     bufferedWriter.newLine();
                 }
@@ -145,6 +145,8 @@ public class CoNLLUWriter implements DocumentWriter {
                 }
 
                 //TODO: multiword
+
+                //TODO: empty word
 
                 for (Node descendant : descendants) {
                     StringBuilder sb = new StringBuilder();
@@ -177,7 +179,7 @@ public class CoNLLUWriter implements DocumentWriter {
         sb.append(TAB);
         sb.append(getString(node.getDeprel()));
         sb.append(TAB);
-        sb.append(getString(node.getDeps()));
+        sb.append(getString(node.getDeps().toStringFormat()));
         sb.append(TAB);
         sb.append(getString(node.getMisc()));
     }

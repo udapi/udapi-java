@@ -62,15 +62,17 @@ public interface Root {
     /**
      * Adds multiword to the sentence.
      *
-     * @param multiword multiword to add
+     * @param words words of multiword
+     * @param form from of multiword
+     * @param misc misc of multiword
      */
-    void addMultiword(String multiword);
+    void addMultiword(List<Node> words, String form, String misc);
 
     /**
      *
      * @return mutltiwords belonging to the sentence.
      */
-    List<String> getMultiwords();
+    List<Mwt> getMultiwords();
 
     /**
      * Sets sentence in plain text.
@@ -196,7 +198,7 @@ public interface Root {
      *
      * @return deps of the node
      */
-    String getDeps();
+    EnhancedDeps getDeps();
 
     /**
      *
@@ -220,4 +222,15 @@ public interface Root {
      */
     String getNewDocId();
 
+    /**
+     *
+     * @return empty nodes
+     */
+    List<EmptyNode> getEmptyNodes();
+
+    /**
+     *
+     * @param emptyNodes empty nodes of the tree
+     */
+    void setEmptyNodes(List<EmptyNode> emptyNodes);
 }

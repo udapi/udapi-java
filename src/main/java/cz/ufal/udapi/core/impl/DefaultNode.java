@@ -1,9 +1,6 @@
 package cz.ufal.udapi.core.impl;
 
-import cz.ufal.udapi.core.Bundle;
-import cz.ufal.udapi.core.Document;
-import cz.ufal.udapi.core.Root;
-import cz.ufal.udapi.core.Node;
+import cz.ufal.udapi.core.*;
 import cz.ufal.udapi.exception.UdapiException;
 
 import java.util.*;
@@ -30,8 +27,9 @@ public class DefaultNode implements Node {
     private String feats;
     private String head;
     private String deprel;
-    private String deps;
+    private EnhancedDeps deps;
     private String misc;
+    private Mwt mwt;
 
     private Optional<Node> firstChild = Optional.empty();
     private Optional<Node> nextSibling = Optional.empty();
@@ -53,9 +51,16 @@ public class DefaultNode implements Node {
         remove(EnumSet.noneOf(Node.RemoveArg.class));
     }
 
+    /**
+     * For non-root nodes, the general address format is:
+     * node.bundle.bundle_id + '/' + node.root.zone + '#' + node.ord,
+     * e.g. s123/en_udpipe#4. If zone is empty, the slash is excluded as well,
+     * e.g. s123#4.
+     * @return full (document-wide) id of the node.
+     */
     @Override
     public String getAddress() {
-        return getRoot().getAddress() + "#" + getOrd();
+        return (null != getRoot() ? getRoot().getAddress() : "?") + "#" + getOrd();
     }
 
     @Override
@@ -685,11 +690,11 @@ public class DefaultNode implements Node {
         this.deprel = deprel;
     }
 
-    public String getDeps() {
+    public EnhancedDeps getDeps() {
         return deps;
     }
 
-    public void setDeps(String deps) {
+    public void setDeps(EnhancedDeps deps) {
         this.deps = deps;
     }
 
@@ -699,6 +704,16 @@ public class DefaultNode implements Node {
 
     public void setMisc(String misc) {
         this.misc = misc;
+    }
+
+    @Override
+    public Mwt getMwt() {
+        return mwt;
+    }
+
+    @Override
+    public void setMwt(Mwt mwt) {
+        this.mwt = mwt;
     }
 
     @Override

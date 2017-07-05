@@ -1,10 +1,9 @@
 package cz.ufal.udapi.core.io.impl;
 
-import cz.ufal.udapi.core.Bundle;
-import cz.ufal.udapi.core.Document;
-import cz.ufal.udapi.core.Root;
-import cz.ufal.udapi.core.Node;
+import cz.ufal.udapi.core.*;
 import cz.ufal.udapi.core.impl.DefaultDocument;
+import cz.ufal.udapi.core.impl.DefaultEmptyNode;
+import cz.ufal.udapi.core.impl.DefaultNode;
 import cz.ufal.udapi.core.impl.DefaultRoot;
 import cz.ufal.udapi.core.io.DocumentReader;
 import cz.ufal.udapi.core.io.UdapiIOException;
@@ -33,6 +32,7 @@ public class CoNLLUReader implements DocumentReader {
     private static final String EMPTY_STRING = "";
     private static final String TAB = "\\t";
     private static final String DASH = "-";
+    private static final String DOT = ".";
     private static final String NEWPAR = "newpar";
     private static final char HASH = '#';
     private static final Pattern tabPattern = Pattern.compile(TAB);
@@ -107,7 +107,7 @@ public class CoNLLUReader implements DocumentReader {
             }
             //process last sentence if there was no empty line after it
             List<String> finalWords = words;
-            final int finalSentenceId = sentenceId++;
+            final int finalSentenceId = sentenceId;
             executor.submit(() -> processSentenceWithBundle(finalSentenceId, document, finalWords));
         } catch (IOException e) {
             throw new UdapiIOException(e);
@@ -244,9 +244,12 @@ public class CoNLLUReader implements DocumentReader {
         Node root = tree.getNode();
 
         List<Node> nodes = new ArrayList<>();
+        List<EmptyNode> emptyNodes = new ArrayList<>();
         nodes.add(root);
         List<Integer> parents = new ArrayList<>();
         parents.add(0);
+
+        List<MwtStruct> mwtStructs = new ArrayList<>();
 
         for (String word : words) {
             if (word.charAt(0) == HASH) {
@@ -287,9 +290,18 @@ public class CoNLLUReader implements DocumentReader {
                 }
             } else {
                 //process word
-                processWord(tree, root, nodes, parents, word);
+                processWord(tree, root, nodes, parents, emptyNodes, mwtStructs, word);
             }
         }
+
+        //process multiwords
+        mwtStructs.forEach(m -> {
+            List<Node> wordsList = nodes.subList(m.rangeStart, m.rangeEnd+1);
+            tree.addMultiword(wordsList, m.form, m.misc);
+        });
+
+        //add empty nodes to the tree
+        tree.setEmptyNodes(emptyNodes);
 
         //set correct parents
         for (int i = 1; i < nodes.size(); i++) {
@@ -302,7 +314,7 @@ public class CoNLLUReader implements DocumentReader {
     /**
      * Processes word.
      */
-    private void processWord(Root tree, Node root, List<Node> nodes, List<Integer> parents, String word) {
+    private void processWord(Root tree, Node root, List<Node> nodes, List<Integer> parents, List<EmptyNode> emptyNodes, List<MwtStruct> mwtStructs, String word) {
 
         String[] fields = tabPattern.split(word, 10);
         String id = fields[0];
@@ -319,7 +331,35 @@ public class CoNLLUReader implements DocumentReader {
             misc = fields[9];
         }
 
-        if (!id.contains(DASH)) {
+        if (id.contains(DASH)) {
+            Matcher m = idRangePattern.matcher(id);
+            if (m.matches()) {
+
+                MwtStruct mwtStruct = new MwtStruct();
+                mwtStruct.form = form;
+                mwtStruct.misc = misc;
+                mwtStruct.rangeStart = Integer.parseInt(m.group(1));
+                mwtStruct.rangeEnd = Integer.parseInt(m.group(2));
+
+                mwtStructs.add(mwtStruct);
+            }
+        } else if (id.contains(DOT)) {
+            //empty node
+
+            EmptyNode newEmptyNode = new DefaultEmptyNode(tree);
+            newEmptyNode.setForm(form);
+            newEmptyNode.setLemma(lemma);
+            newEmptyNode.setUpos(upos);
+            newEmptyNode.setXpos(xpos);
+            newEmptyNode.setFeats(feats);
+            newEmptyNode.setHead(head);
+            newEmptyNode.setDeprel(deprel);
+            newEmptyNode.setDeps(new EnhancedDeps(deps, tree));
+            newEmptyNode.setMisc(misc);
+            newEmptyNode.setEmptyNodeId(id);
+
+            emptyNodes.add(newEmptyNode);
+        } else {
             Node child = root.createChild();
             child.setForm(form);
             child.setLemma(lemma);
@@ -328,17 +368,18 @@ public class CoNLLUReader implements DocumentReader {
             child.setFeats(feats);
             child.setHead(head);
             child.setDeprel(deprel);
-            child.setDeps(deps);
+            child.setDeps(new EnhancedDeps(deps, tree));
             child.setMisc(misc);
 
             nodes.add(child);
             parents.add(Integer.parseInt(head));
-        } else {
-            Matcher m = idRangePattern.matcher(id);
-            if (m.matches()) {
-                //TODO: multiword
-                tree.addMultiword(word);
-            }
         }
+    }
+
+    private static class MwtStruct {
+        int rangeStart;
+        int rangeEnd;
+        String form;
+        String misc;
     }
 }
